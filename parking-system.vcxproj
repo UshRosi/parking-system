@@ -91,6 +91,7 @@
     <ClCompile Include="src\logger\Logger.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\parking\Parking.cpp" />
+    <ClCompile Include="src\simulator\Simulator.cpp" />
     <ClCompile Include="src\state_machine\StateMachine.cpp" />
     <ClCompile Include="src\utils\Timestamp.cpp" />
   </ItemGroup>
@@ -102,6 +103,7 @@
     <ClInclude Include="src\logger\Logger.h" />
     <ClInclude Include="src\parking\Parking.h" />
     <ClInclude Include="src\sensor\Sensor.h" />
+    <ClInclude Include="src\simulator\Simulator.h" />
     <ClInclude Include="src\state_machine\StateMachine.h" />
     <ClInclude Include="src\utils\Timestamp.h" />
   </ItemGroup>

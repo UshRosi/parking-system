@@ -7,23 +7,20 @@
 #include "../logger/Logger.h"
 #include "../state_machine/StateMachine.h"
 #include <thread>
-
+#include <atomic>
 class Gate {
 public:
-    Gate(int gateID, int sensorA, int sensorB);
-    void simulate();
+    Gate(int gateID, StateMachine& stateMachine);
+    void start();
+    void stop();
 
 private:
     int gateID;
-    int sensorA;
-    int sensorB;
+    StateMachine& stateMachine; // Reference to the gate's state machine
+    std::thread processingThread;
+    std::atomic<bool> running{ false };
 
-    EventQueue eventQueue;
-    StateMachine stateMachine;
-    std::thread simulationThread;
-    std::thread stateMachineThread;
-
-    void generateSensorEvents();
+    void processEvents();
 };
 
 #endif // GATE_H

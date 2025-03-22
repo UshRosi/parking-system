@@ -18,6 +18,7 @@
     <ClCompile Include="src\utils\Timestamp.cpp" />
     <ClCompile Include="src\parking\Parking.cpp" />
     <ClCompile Include="src\logger\Logger.cpp" />
+    <ClCompile Include="src\simulator\Simulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\config.h" />
@@ -29,5 +30,6 @@
     <ClInclude Include="src\utils\Timestamp.h" />
     <ClInclude Include="src\parking\Parking.h" />
     <ClInclude Include="src\logger\Logger.h" />
+    <ClInclude Include="src\simulator\Simulator.h" />
   </ItemGroup>
 </Project>
