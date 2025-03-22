@@ -21,7 +21,7 @@ public:
     explicit Config(const std::string& filename);
 
     bool loadConfig();
-    Configs getConfig() const;
+    Configs& getConfig();
 
 private:
     std::string filename;

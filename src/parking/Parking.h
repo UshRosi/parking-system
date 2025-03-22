@@ -1,25 +1,33 @@
 #ifndef PARKINGLOT_H
 #define PARKINGLOT_H
+#include <mutex>
+#include <iostream>
 
-class ParkingLot {
+class Parking {
 public:
-    static ParkingLot& getInstance(); // Singleton accessor
+    static Parking& getInstance(); // Singleton accessor
+    static void initialize(int& maxCapacity);
 
     void updateVehicleCount(int delta);
     int getVehicleCount() const;
     int getMaxCapacity() const;
     bool isFull() const; 
-
+    bool isEmpty() const; 
+    std::mutex& getMutex();
 private:
-    ParkingLot(); // Private constructor
-    ~ParkingLot() = default; // Default destructor
+    Parking(int& maxCapacity); 
+    ~Parking() = default; // Default destructor
 
-    ParkingLot(const ParkingLot&) = delete; // Disable copy constructor
-    ParkingLot& operator=(const ParkingLot&) = delete; // Disable assignment
+    Parking(const Parking&) = delete; // Disable copy constructor
+    Parking& operator=(const Parking&) = delete; // Disable assignment
+
+    mutable std::mutex mutex;
 
     int vehicleCount; // Stores the vehicle count
-    std::mutex mutex;
     const int maxCapacity; 
+
+    // Static instance pointer
+    static Parking* instance;
 };
 
 #endif // PARKINGLOT_H

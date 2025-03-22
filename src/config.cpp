@@ -23,6 +23,6 @@ bool Config::loadConfig() {
     }
 }
 
-Configs Config::getConfig() const {
+Configs& Config::getConfig() {
     return configData;
 }
