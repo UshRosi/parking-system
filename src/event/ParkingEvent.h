@@ -1,11 +1,10 @@
 #ifndef PARKINGEVENT_H
 #define PARKINGEVENT_H
 
-#include <chrono>
 
 struct ParkingEvent {
     int gateID;                    
-    long long timestamp;            
+    uint64_t timestamp;
     bool isEntry; 
 };
 

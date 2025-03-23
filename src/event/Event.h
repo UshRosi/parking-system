@@ -6,8 +6,8 @@
 struct SensorEvent {
     int gateID;
     int sensorID;
-    bool state; // 1: HIGH or 2: LOW 
-    long long timestamp; // Timestamp in milliseconds
+    bool state; 
+    uint64_t timestamp;
 };
 
 #endif

@@ -1,8 +1,6 @@
 #include "config.h"
-#include <fstream>
-#include <iostream>
 
-Config::Config(const std::string& filename) : filename(filename) {} //TODO:  da capire questa 
+Config::Config(const std::string& filename) : filename(filename) {}
 
 bool Config::loadConfig() {
     std::ifstream file(filename);
@@ -13,8 +11,8 @@ bool Config::loadConfig() {
 
     try {
         nlohmann::json j;
-        file >> j; // Read JSON from file
-        configData = j.get<Configs>(); // Convert JSON to struct
+        file >> j; 
+        configData = j.get<Configs>(); 
         return true;
     }
     catch (const std::exception& e) {

@@ -2,7 +2,6 @@
 
 StateMachine::StateMachine(EventQueue& eventQueue)
     : eventQueue(eventQueue) {
-    // Initialize any other members if needed
 }
 
 void StateMachine::processEvents()
@@ -13,18 +12,12 @@ void StateMachine::processEvents()
         
         SensorEvent event = eventQueue.pop();
 
-        std::cout << "New event found! sensor, gate id: "<< event.gateID  << std::endl;
-
         processEvent(event, parking);
     }
 }
 
     void StateMachine::processEvent(const SensorEvent& event, Parking& parking) 
     {
-        std::cout << "Processing event - Sensor ID: " << event.sensorID
-              << ", State: " << event.state 
-              << ", Gate ID: " << event.gateID << std::endl;
-
         switch (currentState[event.gateID])
         {
         case STATE_IDLE:
@@ -50,10 +43,8 @@ void StateMachine::processEvents()
     }
 
    
-    void StateMachine::handleParkingEvent(const SensorEvent& event, Parking& parking, bool isEntry) {
-        std::cout << (isEntry ? "Car entering" : "Car exiting")
-            << " at Gate: " << event.gateID << std::endl;
-
+    void StateMachine::handleParkingEvent(const SensorEvent& event, Parking& parking, bool isEntry) 
+    {
         ParkingEvent parkingEvent{ event.gateID, event.timestamp, isEntry };
 
         if (isEntry) {

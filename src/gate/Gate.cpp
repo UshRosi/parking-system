@@ -1,13 +1,16 @@
 #include "Gate.h"
-#include <cstdlib>
-#include <unistd.h>
 
 
-Gate::Gate(int gateID, StateMachine& stateMachine)
-    : gateID(gateID), stateMachine(stateMachine) {
+Gate::Gate(StateMachine& stateMachine)
+    :  stateMachine(stateMachine) {
+}
+
+Gate::~Gate() {
+    stop(); 
 }
 
 void Gate::start() {
+    if (running) return;
     running = true;
     processingThread = std::thread(&Gate::processEvents, this);
 }

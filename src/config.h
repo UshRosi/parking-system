@@ -3,8 +3,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define NUM_GATES 4  
+#define NUM_GATES 4
 
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <nlohmann/json.hpp>
 

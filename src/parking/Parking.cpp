@@ -6,6 +6,11 @@ Parking::Parking(int& maxCapacity)
     : vehicleCount(0), maxCapacity(maxCapacity) {
 }
 
+Parking::~Parking() {
+    delete instance;
+    instance = nullptr;
+}
+
 // Singleton instance method
 Parking& Parking::getInstance() {
     if (!instance) {
@@ -25,12 +30,11 @@ void Parking::initialize(int& maxCapacity) {
     }
 }
 
-
 // Check if a vehicle can enter
-bool Parking::canEnter() {
+bool Parking::greenLight() {
     std::unique_lock<std::mutex> lock(tempCountMutex);
     if (vehicleCount + tempVehicleCount < maxCapacity) {
-        tempVehicleCount++; // Reserve a spot for the entering vehicle
+        tempVehicleCount++; 
         return true;
     }
     return false;
@@ -40,7 +44,7 @@ bool Parking::canEnter() {
 bool Parking::canExit() {
     std::unique_lock<std::mutex> lock(tempCountMutex);
     if (vehicleCount - tempExitCount > 0) {
-        tempExitCount++; // Reserve a spot for the exiting vehicle
+        tempExitCount++; 
         return true;
     }
     return false;
@@ -52,7 +56,10 @@ void Parking::confirmEntry(const ParkingEvent& event) {
     tempVehicleCount--; // Release the reserved spot
     vehicleCount++;     // Increment the actual vehicle count
     notifyObservers(event);
-    std::cout << "Confirmed entry. Vehicle count: " << vehicleCount << std::endl;
+    std::cout << GREEN_TEXT
+        << "  [" << getString(event.timestamp) << "] Vehicle entered from gate " << event.gateID << ". Vehicles inside: " << vehicleCount << "\n"
+        << "----------------------------------------------------\n"
+        << RESET_TEXT;
 }
 
 // Confirm an exit
@@ -61,15 +68,17 @@ void Parking::confirmExit(const ParkingEvent& event) {
     tempExitCount--; // Release the reserved spot
     vehicleCount--;  // Decrement the actual vehicle count
     notifyObservers(event);
-    std::cout << "Confirmed exit. Vehicle count: " << vehicleCount << std::endl;
+    std::cout << YELLOW_TEXT
+        << "  [" << getString(event.timestamp) << "] Vehicle exited from gate " << event.gateID << ". Vehicles inside: " << vehicleCount << "\n"
+        << "----------------------------------------------------\n"
+        << RESET_TEXT;
 }
 
-// Add an observer
+
 void Parking::addObserver(std::shared_ptr<ParkingObserver> observer) {
     observers.push_back(observer);
 }
 
-// Notify all observers
 void Parking::notifyObservers(const ParkingEvent& event) {
     for (auto& observer : observers) {
         observer->onVehicleCountChanged(vehicleCount, event);

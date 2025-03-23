@@ -18,23 +18,18 @@
         
 
         // Convert timestamp to a human-readable format
-        std::time_t time = event.timestamp / 1000; // Convert milliseconds to seconds
-        std::tm* tm = std::localtime(&time);
-        char buffer[80];
-        std::strftime(buffer, sizeof(buffer), "%A, %B %d, %Y %H:%M:%S", tm);
-        std::string timestampStr(buffer); 
+        std::string timestampStr  = getString(event.timestamp);
 
         // Description 
-        std::string description = event.isEntry ? "Entry" : "Exit";
-        description += " at Gate" + std::to_string(event.gateID);
+        std::string description = createDescription(event); 
 
         // Create JSON message
-        nlohmann::json jsonMessage;
-
-        jsonMessage["timestamp"] = timestampStr;
-        jsonMessage["description"] = description; 
+        nlohmann::json jsonMessage;        
+        
         jsonMessage["occupied"] = vehicleCount;
         jsonMessage["remaining"] = maxCapacity - vehicleCount;
+        jsonMessage["description"] = description;
+        jsonMessage["timestamp"] = timestampStr;
 
         // Convert JSON to string
         std::string jsonData = jsonMessage.dump();
@@ -44,7 +39,7 @@
             std::unique_lock<std::mutex> lock(queueMutex);
             taskQueue.push([this, jsonData]() { sendHttpRequest(jsonData); });
         }
-        queueCond.notify_one(); // Notify the worker thread
+        queueCond.notify_one(); 
     }
 
     void HttpObserver::worker() {
@@ -63,7 +58,7 @@
             }
 
             if (task) {
-                task(); // Execute the task
+                task(); 
             }
         }
     }
@@ -81,14 +76,19 @@
             headers = curl_slist_append(headers, "Content-Type: application/json");
             curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
+
             // Perform the request
-            CURLcode res = curl_easy_perform(curl);
-            if (res != CURLE_OK) {
-                std::cerr << "HTTP request failed: " << curl_easy_strerror(res) << std::endl;
-            }
+           curl_easy_perform(curl);
+            
             // Clean up
             curl_slist_free_all(headers);
             curl_easy_cleanup(curl);
         }
+    }
+
+    std::string HttpObserver::createDescription(const ParkingEvent& event) {
+        std::string description = event.isEntry ? "Entry" : "Exit";
+        description += " at Gate " + std::to_string(event.gateID);
+        return description;
     }
 

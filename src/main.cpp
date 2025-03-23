@@ -7,31 +7,22 @@
 #include "simulator/Simulator.h"
 #include "observer/HttpObserver.h"
 #include <thread>
-#include <atomic>
 #include <csignal>
-#include <memory>
+
 std::atomic<bool> running{ true };
 
-void signalHandler(int signal) {
-    running = false;
-}
 
 int main() {
-    //std::signal(SIGINT, signalHandler);
+    //setupSignalHandler();
 
 
     Config loader("../appconfig.json");
 
     if (!loader.loadConfig()) {
-        return 1; // Exit if config loading fails
+        return 1; 
     }
 
     Configs& config = loader.getConfig();
-
-    // Print the configuration
-    std::cout << "Max Capacity: " << config.max_capacity << std::endl;
-    std::cout << "Server IP: " << config.server_ip << std::endl;
-    std::cout << "Server Port: " << config.server_port << std::endl;
 
 
     Parking::initialize(config.max_capacity); 
@@ -40,22 +31,20 @@ int main() {
 
     Parking::getInstance().addObserver(httpObserver);
 
-    std::cout << "Correct init Event " << std::endl;
-
 
     EventQueue eventQueue;
 
     Simulator simulator(eventQueue );
 
-    // Initialize state machines
-    StateMachine stateMachine(eventQueue); // State machine for Gate 1
-    //StateMachine stateMachine2(2, eventQueue); // State machine for Gate 2
+    
+    StateMachine stateMachine(eventQueue); 
+
 
     std::array<std::unique_ptr<Gate>, NUM_GATES> gates;
 
     //  Initialize each Gate object
     for (int i = 0; i < NUM_GATES; ++i) {
-        gates[i] = std::make_unique<Gate>(i, stateMachine);
+        gates[i] = std::make_unique<Gate>(stateMachine);
     }
 
     //  Start simulator and all gates
@@ -70,6 +59,7 @@ int main() {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
+    std::cout << "Stopping simulator and gates..." << std::endl;
     simulator.stop();
     for (auto& gate : gates) {
         gate->stop();

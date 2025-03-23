@@ -8,6 +8,8 @@
   <ItemGroup>
     <None Include="appconfig.json" />
     <None Include="Makefile" />
+    <None Include="docker-server\app.py" />
+    <None Include="docker-server\Dockerfile" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\config.cpp" />
@@ -15,21 +17,20 @@
     <ClCompile Include="src\event\EventQueue.cpp" />
     <ClCompile Include="src\state_machine\StateMachine.cpp" />
     <ClCompile Include="src\gate\Gate.cpp" />
-    <ClCompile Include="src\utils\Timestamp.cpp" />
     <ClCompile Include="src\parking\Parking.cpp" />
-    <ClCompile Include="src\logger\Logger.cpp" />
     <ClCompile Include="src\simulator\Simulator.cpp" />
+    <ClCompile Include="src\observer\ParkingObserver.h" />
+    <ClCompile Include="src\observer\HttpObserver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\config.h" />
     <ClInclude Include="src\event\Event.h" />
-    <ClInclude Include="src\sensor\Sensor.h" />
     <ClInclude Include="src\event\EventQueue.h" />
     <ClInclude Include="src\state_machine\StateMachine.h" />
     <ClInclude Include="src\gate\Gate.h" />
-    <ClInclude Include="src\utils\Timestamp.h" />
     <ClInclude Include="src\parking\Parking.h" />
-    <ClInclude Include="src\logger\Logger.h" />
     <ClInclude Include="src\simulator\Simulator.h" />
+    <ClInclude Include="src\observer\HttpObserver.h" />
+    <ClInclude Include="src\event\ParkingEvent.h" />
   </ItemGroup>
 </Project>

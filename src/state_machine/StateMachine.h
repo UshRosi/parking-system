@@ -22,8 +22,11 @@ public:
 
 private:
     EventQueue& eventQueue;
+
     void processEvent(const SensorEvent& event,Parking& parking);
+
     void handleParkingEvent(const SensorEvent& event, Parking& parking, bool isEntry);
+
     SensorState currentState[NUM_GATES]{ STATE_IDLE, STATE_IDLE,STATE_IDLE, STATE_IDLE };
 };
 
