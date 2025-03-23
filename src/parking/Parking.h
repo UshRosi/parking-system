@@ -12,10 +12,6 @@ public:
     static Parking& getInstance(); // Singleton accessor
     static void initialize(int& maxCapacity);
 
-    int getVehicleCount() const;
-    int getMaxCapacity() const;
- 
-
     bool canEnter();
     bool canExit();
     void confirmEntry(const ParkingEvent& event);
@@ -23,6 +19,7 @@ public:
 
     void addObserver(std::shared_ptr<ParkingObserver> observer);
 private:
+
     Parking(int& maxCapacity); 
     ~Parking() = default; // Default destructor
 

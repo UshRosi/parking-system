@@ -5,8 +5,8 @@
 #include "../event/Event.h"
 #include "../event/ParkingEvent.h"
 #include "../parking/Parking.h"
-#include <mutex>
-#include <atomic>
+#include "../config.h"
+#include <iostream>
 
 class StateMachine {
 public:
@@ -23,7 +23,8 @@ public:
 private:
     EventQueue& eventQueue;
     void processEvent(const SensorEvent& event,Parking& parking);
-    SensorState currentState[4]{ STATE_IDLE, STATE_IDLE,STATE_IDLE, STATE_IDLE };
+    void handleParkingEvent(const SensorEvent& event, Parking& parking, bool isEntry);
+    SensorState currentState[NUM_GATES]{ STATE_IDLE, STATE_IDLE,STATE_IDLE, STATE_IDLE };
 };
 
 #endif // STATE_MACHINE_H

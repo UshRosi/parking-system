@@ -9,6 +9,7 @@
 #include <thread>
 #include <atomic>
 #include <csignal>
+#include <memory>
 std::atomic<bool> running{ true };
 
 void signalHandler(int signal) {
@@ -47,35 +48,32 @@ int main() {
     Simulator simulator(eventQueue );
 
     // Initialize state machines
-    StateMachine stateMachine1(eventQueue); // State machine for Gate 1
+    StateMachine stateMachine(eventQueue); // State machine for Gate 1
     //StateMachine stateMachine2(2, eventQueue); // State machine for Gate 2
 
-    // Initialize gates
-    Gate gate1(0, stateMachine1); // Gate 1 with its state machine
-    Gate gate2(1, stateMachine1); // Gate 2 with its state machine
-    Gate gate3(2, stateMachine1); // Gate 2 with its state machine
-    Gate gate4(3, stateMachine1); // Gate 2 with its state machine
-    // Initialize simulator
-    
-    
+    std::array<std::unique_ptr<Gate>, NUM_GATES> gates;
 
+    //  Initialize each Gate object
+    for (int i = 0; i < NUM_GATES; ++i) {
+        gates[i] = std::make_unique<Gate>(i, stateMachine);
+    }
+
+    //  Start simulator and all gates
     simulator.start();
-    gate1.start();
-    gate2.start();
-    gate3.start();
-    gate4.start();
+    for (auto& gate : gates) {
+        gate->start();
+    }
 
+    
     // Wait for shutdown signal
     while (running) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
-    // Stop simulator, gates, and state machines gracefully
     simulator.stop();
-    gate1.stop();
-    gate2.stop();
-    gate3.stop();
-    gate4.stop();
+    for (auto& gate : gates) {
+        gate->stop();
+    }
 
     std::cout << "Shutting down..." << std::endl;
 

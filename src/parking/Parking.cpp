@@ -1,7 +1,5 @@
 #include "Parking.h"
 
-
-
 Parking* Parking::instance = nullptr;
 
 Parking::Parking(int& maxCapacity)
@@ -11,32 +9,20 @@ Parking::Parking(int& maxCapacity)
 // Singleton instance method
 Parking& Parking::getInstance() {
     if (!instance) {
-        std::cout << "Errore" << std::endl; 
         throw std::runtime_error("ParkingLot not initialized. Call initialize() first.");
     }
     return *instance;
 }
 
 void Parking::initialize(int& maxCapacity) {
-    if (!instance) {
-        std::cout << "PMax capacity." << maxCapacity << std::endl;
-
+    if (!instance) 
+    {
         instance = new Parking(maxCapacity);
     }
-    else {
+    else 
+    {
         std::cout << "ParkingLot already initialized." << std::endl; 
     }
-}
-
-
-int Parking::getVehicleCount() const 
-{
-    std::unique_lock <std::mutex> lock(mutex);
-    return vehicleCount;
-}
-
-int Parking::getMaxCapacity() const {
-    return maxCapacity;
 }
 
 

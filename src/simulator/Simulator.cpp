@@ -21,7 +21,7 @@ void Simulator::generateSensorEvents() {
     Parking& parking = Parking::getInstance(); 
     while (running) {
         // Simulate sensor events for all gates
-        for (int gateID = 0; gateID <= 3; ++gateID) { // Example: 2 gates
+        for (int gateID = 0; gateID <= NUM_GATES; ++gateID) {
 
             // Simulate a random event: entry or exit
             bool isEntry = rand() % 2; // 50% chance of entry or exit

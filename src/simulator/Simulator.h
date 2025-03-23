@@ -2,9 +2,11 @@
 #define SIMULATOR_H
 
 #include "../event/EventQueue.h"
-#include <thread>
 #include "../parking/Parking.h"
+#include "../config.h"
 #include <atomic>
+#include <thread>
+
 class Simulator {
 public:
 

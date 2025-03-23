@@ -4,8 +4,8 @@
 #include <chrono>
 
 struct ParkingEvent {
-    int gateID;                     // Gate ID (e.g., 1, 2)
-    long long timestamp;            // Timestamp in milliseconds  
+    int gateID;                    
+    long long timestamp;            
     bool isEntry; 
 };
 

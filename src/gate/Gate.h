@@ -4,7 +4,6 @@
 #include "../event/EventQueue.h"
 #include "../event/Event.h"
 #include "../utils/Timestamp.h"
-#include "../logger/Logger.h"
 #include "../state_machine/StateMachine.h"
 #include <thread>
 #include <atomic>

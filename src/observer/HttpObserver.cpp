@@ -1,7 +1,7 @@
 #include "HttpObserver.h"
 
 
-    HttpObserver::HttpObserver(int maxCapacity, std::string& url, int port) : maxCapacity(maxCapacity), url(url) , port(port), running(true)  {
+    HttpObserver::HttpObserver(int maxCapacity, std::string& url, int port) : maxCapacity(maxCapacity), port(port), url(url), running(true) {
         workerThread = std::thread(&HttpObserver::worker, this);
     }
 
@@ -33,8 +33,8 @@
 
         jsonMessage["timestamp"] = timestampStr;
         jsonMessage["description"] = description; 
-        jsonMessage["vehicleCount"] = vehicleCount;
-        jsonMessage["maxCapacity"] = maxCapacity - vehicleCount;
+        jsonMessage["occupied"] = vehicleCount;
+        jsonMessage["remaining"] = maxCapacity - vehicleCount;
 
         // Convert JSON to string
         std::string jsonData = jsonMessage.dump();

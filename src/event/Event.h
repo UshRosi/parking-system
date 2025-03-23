@@ -1,7 +1,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include "../sensor/Sensor.h"
 #include <chrono>
 
 struct SensorEvent {

@@ -1,6 +1,9 @@
 #pragma once
+
 #ifndef CONFIG_H
 #define CONFIG_H
+
+#define NUM_GATES 4  
 
 #include <string>
 #include <nlohmann/json.hpp>
