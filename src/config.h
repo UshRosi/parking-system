@@ -3,7 +3,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define NUM_GATES 4
+#define NUM_GATES 2
 
 #include <fstream>
 #include <iostream>

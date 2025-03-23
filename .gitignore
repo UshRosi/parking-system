@@ -8,8 +8,17 @@
 *.userosscache
 *.suo
 *.sln.docstates
+*.vcxproj.user
+*.suo
+*.ncb
+*.log
+*.cache
+*.vs/
 
 # Ignore log or backup files
 *.log
 *.bak
 
+# Ignore Docker-related temporary files
+docker-server/*.log
+docker-server/tmp/

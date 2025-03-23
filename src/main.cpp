@@ -13,8 +13,6 @@ std::atomic<bool> running{ true };
 
 
 int main() {
-    //setupSignalHandler();
-
 
     Config loader("../appconfig.json");
 

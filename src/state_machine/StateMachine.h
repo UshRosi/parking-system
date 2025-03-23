@@ -27,7 +27,7 @@ private:
 
     void handleParkingEvent(const SensorEvent& event, Parking& parking, bool isEntry);
 
-    SensorState currentState[NUM_GATES]{ STATE_IDLE, STATE_IDLE,STATE_IDLE, STATE_IDLE };
+    SensorState currentState[NUM_GATES] = {STATE_IDLE, STATE_IDLE };
 };
 
 #endif // STATE_MACHINE_H
