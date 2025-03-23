@@ -3,23 +3,24 @@
 #include <mutex>
 #include <atomic>
 #include <iostream>
+#include <vector>
+#include "../observer/ParkingObserver.h"
 
 class Parking {
 public:
     static Parking& getInstance(); // Singleton accessor
     static void initialize(int& maxCapacity);
 
-    void updateVehicleCount(int delta);
     int getVehicleCount() const;
     int getMaxCapacity() const;
-    bool isFull() const; 
-    bool isEmpty() const; 
-    std::mutex& getMutex();
+ 
 
     bool canEnter();
     bool canExit();
     void confirmEntry();
     void confirmExit();
+
+    void addObserver(std::shared_ptr<ParkingObserver> observer);
 private:
     Parking(int& maxCapacity); 
     ~Parking() = default; // Default destructor
@@ -36,6 +37,9 @@ private:
     std::atomic<int> tempVehicleCount{ 0 }; // Temporary count for vehicles entering
     std::atomic<int> tempExitCount{ 0 };   // Temporary count for vehicles exiting
     std::mutex tempCountMutex;
+
+    std::vector<std::shared_ptr<ParkingObserver>> observers;
+    void notifyObservers();
 
     // Static instance pointer
     static Parking* instance;

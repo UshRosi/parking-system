@@ -1,7 +1,6 @@
 #include "Gate.h"
 #include <cstdlib>
 #include <unistd.h>
-#include "../parking/Parking.h"
 
 
 Gate::Gate(int gateID, StateMachine& stateMachine)

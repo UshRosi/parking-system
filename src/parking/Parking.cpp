@@ -4,6 +4,10 @@
 
 Parking* Parking::instance = nullptr;
 
+Parking::Parking(int& maxCapacity)
+    : vehicleCount(0), maxCapacity(maxCapacity) {
+}
+
 // Singleton instance method
 Parking& Parking::getInstance() {
     if (!instance) {
@@ -24,18 +28,6 @@ void Parking::initialize(int& maxCapacity) {
     }
 }
 
-// Updates vehicle count
-void Parking::updateVehicleCount(int delta) {
-   
-    std::cout << "------------------------BEFORE UPDATE :Current number of car: " << vehicleCount << std::endl;
-    std::unique_lock <std::mutex> lock(mutex);
-
-    vehicleCount += delta;
-    
-
-    std::cout << "------------------------AFTER UPDATE :Current number of car: " << vehicleCount << std::endl;
-  
-}
 
 int Parking::getVehicleCount() const 
 {
@@ -47,22 +39,6 @@ int Parking::getMaxCapacity() const {
     return maxCapacity;
 }
 
-bool Parking::isFull() const
-{
-    return getVehicleCount() == maxCapacity;
-}
-
-bool Parking::isEmpty() const
-{
-    return getVehicleCount() <= 0;
-}
-
-Parking::Parking(int& maxCapacity)
-    : vehicleCount(0), maxCapacity(maxCapacity) {
-}
-std::mutex& Parking::getMutex() {
-    return mutex;
-}
 
 // Check if a vehicle can enter
 bool Parking::canEnter() {
@@ -89,6 +65,7 @@ void Parking::confirmEntry() {
     std::unique_lock<std::mutex> lock(tempCountMutex);
     tempVehicleCount--; // Release the reserved spot
     vehicleCount++;     // Increment the actual vehicle count
+    notifyObservers();
     std::cout << "Confirmed entry. Vehicle count: " << vehicleCount << std::endl;
 }
 
@@ -97,5 +74,18 @@ void Parking::confirmExit() {
     std::unique_lock<std::mutex> lock(tempCountMutex);
     tempExitCount--; // Release the reserved spot
     vehicleCount--;  // Decrement the actual vehicle count
+    notifyObservers();
     std::cout << "Confirmed exit. Vehicle count: " << vehicleCount << std::endl;
+}
+
+// Add an observer
+void Parking::addObserver(std::shared_ptr<ParkingObserver> observer) {
+    observers.push_back(observer);
+}
+
+// Notify all observers
+void Parking::notifyObservers() {
+    for (auto& observer : observers) {
+        observer->onVehicleCountChanged(vehicleCount);
+    }
 }

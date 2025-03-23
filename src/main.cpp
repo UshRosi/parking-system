@@ -5,6 +5,7 @@
 #include "state_machine/StateMachine.h"
 #include "parking/Parking.h"
 #include "simulator/Simulator.h"
+#include "observer/HttpObserver.h"
 #include <thread>
 #include <atomic>
 #include <csignal>
@@ -31,8 +32,12 @@ int main() {
     std::cout << "Server IP: " << config.server_ip << std::endl;
     std::cout << "Server Port: " << config.server_port << std::endl;
 
+
     Parking::initialize(config.max_capacity); 
- 
+
+    auto httpObserver = std::make_shared<HttpObserver>(config.max_capacity, config.server_ip, config.server_port);
+
+    Parking::getInstance().addObserver(httpObserver);
 
     std::cout << "Correct init Event " << std::endl;
 

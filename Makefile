@@ -2,6 +2,9 @@
 CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++17 -g
 
+# Linker flags (add -lcurl for libcurl)
+LDFLAGS = -lcurl
+
 # Directories
 SRC_DIR = src
 OBJ_DIR = obj
@@ -21,7 +24,7 @@ all: $(TARGET)
 
 # Rule to link the final executable
 $(TARGET): $(OBJS) | $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(TARGET) $(LDFLAGS)
 
 # Rule to compile .cpp files into .o files, ensuring obj subdirectories exist
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
@@ -34,8 +37,7 @@ $(BIN_DIR) $(OBJ_DIR):
 
 # Clean build artifacts
 clean:
-	 rm -rf $(OBJ_DIR) $(BIN_DIR)
-
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 # Print detected source files (debugging)
 print:
