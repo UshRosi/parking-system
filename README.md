@@ -1,4 +1,4 @@
-# C++ Project with Docker Support
+# Parking System
 
 This is a C++ project that uses Docker for a server component and requires a few dependencies for building and running.
 
