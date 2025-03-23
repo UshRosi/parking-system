@@ -36,29 +36,20 @@ int main() {
 
     std::cout << "Correct init Event " << std::endl;
 
-    // Initialize gates
-  /*  Gate gate1(1, 0, 1); // Gate 1 with Sensor A (ID 0) and Sensor B (ID 1)
-    Gate gate2(2, 0, 1); // Gate 2 with Sensor A (ID 2) and Sensor B (ID 3)
 
-
-    gate1.simulate();
-    gate2.simulate();
-
-    // Wait indefinitely (or implement a shutdown mechanism)
-    while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }*/
     EventQueue eventQueue;
 
     Simulator simulator(eventQueue );
 
     // Initialize state machines
-    StateMachine stateMachine1(eventQueue, simulator.tempVehicleCount, simulator.tempExitCount, simulator.tempCountMutex); // State machine for Gate 1
+    StateMachine stateMachine1(eventQueue); // State machine for Gate 1
     //StateMachine stateMachine2(2, eventQueue); // State machine for Gate 2
 
     // Initialize gates
     Gate gate1(0, stateMachine1); // Gate 1 with its state machine
     Gate gate2(1, stateMachine1); // Gate 2 with its state machine
+    Gate gate3(2, stateMachine1); // Gate 2 with its state machine
+    Gate gate4(3, stateMachine1); // Gate 2 with its state machine
     // Initialize simulator
     
     
@@ -66,6 +57,8 @@ int main() {
     simulator.start();
     gate1.start();
     gate2.start();
+    gate3.start();
+    gate4.start();
 
     // Wait for shutdown signal
     while (running) {
@@ -76,6 +69,8 @@ int main() {
     simulator.stop();
     gate1.stop();
     gate2.stop();
+    gate3.stop();
+    gate4.stop();
 
     std::cout << "Shutting down..." << std::endl;
 

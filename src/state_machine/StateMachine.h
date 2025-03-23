@@ -9,7 +9,7 @@
 
 class StateMachine {
 public:
-    StateMachine(EventQueue& eventQueue, std::atomic<int>& tempVehicleCount, std::atomic<int>& tempExitCount, std::mutex& tempCountMutex);
+    StateMachine(EventQueue& eventQueue);
 
     void processEvents(); 
 
@@ -22,10 +22,7 @@ public:
 private:
     EventQueue& eventQueue;
     void processEvent(const SensorEvent& event,Parking& parking);
-    SensorState currentState[2]{ STATE_IDLE, STATE_IDLE };
-    std::atomic<int>& tempVehicleCount;
-    std::atomic<int>& tempExitCount;
-    std::mutex& tempCountMutex;
+    SensorState currentState[4]{ STATE_IDLE, STATE_IDLE,STATE_IDLE, STATE_IDLE };
 };
 
 #endif // STATE_MACHINE_H

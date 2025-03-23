@@ -63,3 +63,39 @@ Parking::Parking(int& maxCapacity)
 std::mutex& Parking::getMutex() {
     return mutex;
 }
+
+// Check if a vehicle can enter
+bool Parking::canEnter() {
+    std::unique_lock<std::mutex> lock(tempCountMutex);
+    if (vehicleCount + tempVehicleCount < maxCapacity) {
+        tempVehicleCount++; // Reserve a spot for the entering vehicle
+        return true;
+    }
+    return false;
+}
+
+// Check if a vehicle can exit
+bool Parking::canExit() {
+    std::unique_lock<std::mutex> lock(tempCountMutex);
+    if (vehicleCount - tempExitCount > 0) {
+        tempExitCount++; // Reserve a spot for the exiting vehicle
+        return true;
+    }
+    return false;
+}
+
+// Confirm an entry
+void Parking::confirmEntry() {
+    std::unique_lock<std::mutex> lock(tempCountMutex);
+    tempVehicleCount--; // Release the reserved spot
+    vehicleCount++;     // Increment the actual vehicle count
+    std::cout << "Confirmed entry. Vehicle count: " << vehicleCount << std::endl;
+}
+
+// Confirm an exit
+void Parking::confirmExit() {
+    std::unique_lock<std::mutex> lock(tempCountMutex);
+    tempExitCount--; // Release the reserved spot
+    vehicleCount--;  // Decrement the actual vehicle count
+    std::cout << "Confirmed exit. Vehicle count: " << vehicleCount << std::endl;
+}

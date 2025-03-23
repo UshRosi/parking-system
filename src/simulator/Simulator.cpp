@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 Simulator::Simulator(EventQueue& eventQueue)
-    : eventQueue(eventQueue), tempVehicleCount(0), tempExitCount(0) {}
+    : eventQueue(eventQueue) {}
 
 void Simulator::start() {
     running = true;
@@ -14,44 +14,25 @@ void Simulator::start() {
 void Simulator::stop() {
     running = false;
     if (simulationThread.joinable()) simulationThread.join();
-    tempVehicleCount = 0;
 }
 
-bool Simulator::canEnter(int gateID) {
-    std::unique_lock<std::mutex> lock(tempCountMutex);
-    Parking& parking = Parking::getInstance();
-    if (parking.getVehicleCount() + tempVehicleCount < parking.getMaxCapacity()) {
-        tempVehicleCount++; // Increment temporary count
-        return true;
-    }
-    return false;
-}
-
-bool Simulator::canExit(int gateID) {
-    std::unique_lock<std::mutex> lock(tempCountMutex);
-    Parking& parking = Parking::getInstance();
-    if (parking.getVehicleCount() - tempExitCount > 0) {
-        tempExitCount++; // Increment temporary count for exiting vehicles
-        return true;
-    }
-    return false;
-}
 
 void Simulator::generateSensorEvents() {
+    Parking& parking = Parking::getInstance(); 
     while (running) {
         // Simulate sensor events for all gates
-        for (int gateID = 0; gateID <= 1; ++gateID) { // Example: 2 gates
+        for (int gateID = 0; gateID <= 3; ++gateID) { // Example: 2 gates
 
             // Simulate a random event: entry or exit
             bool isEntry = rand() % 2; // 50% chance of entry or exit
-            if (isEntry && !canEnter(gateID)) {
+            if (isEntry && !parking.canEnter()) {
                 // Parking lot is full, skip generating entrance event
                 std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Parking lot is full.Skipping entrance event for, GATE " << gateID << std::endl;
                 usleep(100000); // Simulate delay before next event
                 continue;
             }
 
-            if (!isEntry && !canExit(gateID)) {
+            if (!isEntry && !parking.canExit()) {
                 // Parking lot is full, skip generating entrance event
                 std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Parking lot is empty.Skipping exit event, GATE " << gateID << std::endl;
                 usleep(100000); // Simulate delay before next event

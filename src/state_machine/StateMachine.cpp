@@ -3,8 +3,8 @@
 //#include "utils/Logger.h"
 #include <iostream>
 
-StateMachine::StateMachine(EventQueue& eventQueue, std::atomic<int>& tempVehicleCount, std::atomic<int>& tempExitCount, std::mutex& tempCountMutex)
-    : eventQueue(eventQueue), tempVehicleCount(tempVehicleCount), tempExitCount(tempExitCount), tempCountMutex(tempCountMutex) {
+StateMachine::StateMachine(EventQueue& eventQueue)
+    : eventQueue(eventQueue) {
     // Initialize any other members if needed
 }
 
@@ -50,10 +50,7 @@ void StateMachine::processEvents() {
                     if (timestampA < timestampB) {
                         // Vehicle is entering
                         std::cout << "Car is entering. GATE: "<< event.gateID  <<  std::endl;
-                        parking.updateVehicleCount(1);
-
-                        std::unique_lock<std::mutex> lock(tempCountMutex);
-                        tempVehicleCount--;
+                        parking.confirmEntry();
                     }
                 }
                 break;
@@ -65,10 +62,7 @@ void StateMachine::processEvents() {
                     if (timestampB < timestampA) {
                         // Vehicle is exiting
                         std::cout << "Car is exiting GATE: " << event.gateID << std::endl;
-                        parking.updateVehicleCount(-1);
-
-                        std::unique_lock<std::mutex> lock(tempCountMutex);
-                        tempExitCount--;
+                        parking.confirmExit();
                     }
                 }
                 break;
