@@ -3,13 +3,14 @@
 
 #include <memory> // For std::shared_ptr
 
-// Observer Interface
+#include "../event/ParkingEvent.h"
+
 class ParkingObserver {
 public:
     virtual ~ParkingObserver() = default;
 
     // Pure virtual method to be implemented by concrete observers
-    virtual void onVehicleCountChanged(int vehicleCount) = 0;
+    virtual void onVehicleCountChanged(int vehicleCount, const ParkingEvent& event) = 0;
 };
 
 #endif // PARKINGOBSERVER_H

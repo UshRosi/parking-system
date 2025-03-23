@@ -3,6 +3,7 @@
 
 #include "../event/EventQueue.h"
 #include "../event/Event.h"
+#include "../event/ParkingEvent.h"
 #include "../parking/Parking.h"
 #include <mutex>
 #include <atomic>

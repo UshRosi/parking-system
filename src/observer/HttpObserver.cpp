@@ -14,11 +14,27 @@
         if (workerThread.joinable()) workerThread.join();
     }
 
-    void HttpObserver::onVehicleCountChanged(int vehicleCount) {
+    void HttpObserver::onVehicleCountChanged(int vehicleCount, const ParkingEvent& event) {
+        
+
+        // Convert timestamp to a human-readable format
+        std::time_t time = event.timestamp / 1000; // Convert milliseconds to seconds
+        std::tm* tm = std::localtime(&time);
+        char buffer[80];
+        std::strftime(buffer, sizeof(buffer), "%A, %B %d, %Y %H:%M:%S", tm);
+        std::string timestampStr(buffer); 
+
+        // Description 
+        std::string description = event.isEntry ? "Entry" : "Exit";
+        description += " at Gate" + std::to_string(event.gateID);
+
         // Create JSON message
         nlohmann::json jsonMessage;
+
+        jsonMessage["timestamp"] = timestampStr;
+        jsonMessage["description"] = description; 
         jsonMessage["vehicleCount"] = vehicleCount;
-        jsonMessage["maxCapacity"] = maxCapacity;
+        jsonMessage["maxCapacity"] = maxCapacity - vehicleCount;
 
         // Convert JSON to string
         std::string jsonData = jsonMessage.dump();

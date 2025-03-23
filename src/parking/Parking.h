@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "../observer/ParkingObserver.h"
+#include "../event/ParkingEvent.h"
 
 class Parking {
 public:
@@ -17,8 +18,8 @@ public:
 
     bool canEnter();
     bool canExit();
-    void confirmEntry();
-    void confirmExit();
+    void confirmEntry(const ParkingEvent& event);
+    void confirmExit(const ParkingEvent& event);
 
     void addObserver(std::shared_ptr<ParkingObserver> observer);
 private:
@@ -39,7 +40,7 @@ private:
     std::mutex tempCountMutex;
 
     std::vector<std::shared_ptr<ParkingObserver>> observers;
-    void notifyObservers();
+    void notifyObservers(const ParkingEvent& event);
 
     // Static instance pointer
     static Parking* instance;

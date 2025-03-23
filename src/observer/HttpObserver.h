@@ -2,6 +2,7 @@
 #define HTTPOBSERVER_H
 
 #include "ParkingObserver.h" // Include the base observer interface
+#include "../event/ParkingEvent.h" // Include the base observer interface
 #include <nlohmann/json.hpp>     // For JSON serialization
 #include <curl/curl.h>       // For HTTP requests
 #include <thread>            // For background thread
@@ -20,7 +21,7 @@ public:
     ~HttpObserver();
 
     // Override the onVehicleCountChanged method
-    void onVehicleCountChanged(int vehicleCount) override;
+    void onVehicleCountChanged(int vehicleCount,const ParkingEvent& event ) override;
 
 private:
 

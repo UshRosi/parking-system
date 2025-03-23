@@ -61,20 +61,20 @@ bool Parking::canExit() {
 }
 
 // Confirm an entry
-void Parking::confirmEntry() {
+void Parking::confirmEntry(const ParkingEvent& event) {
     std::unique_lock<std::mutex> lock(tempCountMutex);
     tempVehicleCount--; // Release the reserved spot
     vehicleCount++;     // Increment the actual vehicle count
-    notifyObservers();
+    notifyObservers(event);
     std::cout << "Confirmed entry. Vehicle count: " << vehicleCount << std::endl;
 }
 
 // Confirm an exit
-void Parking::confirmExit() {
+void Parking::confirmExit(const ParkingEvent& event) {
     std::unique_lock<std::mutex> lock(tempCountMutex);
     tempExitCount--; // Release the reserved spot
     vehicleCount--;  // Decrement the actual vehicle count
-    notifyObservers();
+    notifyObservers(event);
     std::cout << "Confirmed exit. Vehicle count: " << vehicleCount << std::endl;
 }
 
@@ -84,8 +84,8 @@ void Parking::addObserver(std::shared_ptr<ParkingObserver> observer) {
 }
 
 // Notify all observers
-void Parking::notifyObservers() {
+void Parking::notifyObservers(const ParkingEvent& event) {
     for (auto& observer : observers) {
-        observer->onVehicleCountChanged(vehicleCount);
+        observer->onVehicleCountChanged(vehicleCount, event);
     }
 }

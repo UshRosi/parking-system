@@ -50,7 +50,11 @@ void StateMachine::processEvents() {
                     if (timestampA < timestampB) {
                         // Vehicle is entering
                         std::cout << "Car is entering. GATE: "<< event.gateID  <<  std::endl;
-                        parking.confirmEntry();
+                        ParkingEvent parkingEvent; 
+                        parkingEvent.gateID = event.gateID;
+                        parkingEvent.timestamp = event.timestamp; 
+                        parkingEvent.isEntry = true; 
+                        parking.confirmEntry(parkingEvent);
                     }
                 }
                 break;
@@ -62,7 +66,11 @@ void StateMachine::processEvents() {
                     if (timestampB < timestampA) {
                         // Vehicle is exiting
                         std::cout << "Car is exiting GATE: " << event.gateID << std::endl;
-                        parking.confirmExit();
+                        ParkingEvent parkingEvent;
+                        parkingEvent.gateID = event.gateID;
+                        parkingEvent.timestamp = event.timestamp;
+                        parkingEvent.isEntry = false;
+                        parking.confirmExit(parkingEvent);
                     }
                 }
                 break;
